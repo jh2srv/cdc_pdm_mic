@@ -41,4 +41,4 @@ This repository contains code for reading raw data from a MEMS PDM (Pulse Densit
 This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
-For any inquiries or suggestions, feel free to reach out to [your-email@example.com].
+For any inquiries or suggestions, feel free to reach out via [GitHub](https://github.com/jh2srv).
