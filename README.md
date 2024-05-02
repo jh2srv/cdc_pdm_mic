@@ -13,12 +13,14 @@ This repository contains code for reading raw data from a MEMS PDM (Pulse Densit
 
 ## Usage
 1. **Hardware Setup**: Connect the MEMS PDM microphone to the Raspberry Pi Pico according to the provided specifications.
+
 | Raspberry Pi Pico / RP2040 | PDM Microphone |
 | -------------------------- | ----------------- |
 | 3.3V | VCC |
 | GND | GND |
 | GPIO 17 | DAT |
 | GPIO 16 | CLK |
+
 2. **Software Setup**: Clone this repository to your Raspberry Pi Pico development environment.
 3. **Compilation**:
     - Ensure you have the Raspberry Pi's Pico SDK and required toolchains installed, such as TinyUSB. Refer to the [official Raspberry Pi Pico documentation](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf) for detailed instructions.
