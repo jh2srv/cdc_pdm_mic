@@ -1,4 +1,25 @@
 /* 
+MIT License
+
+Copyright (c) 2024 jh2srv
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
  */
 
 #include <stdlib.h>
@@ -15,14 +36,24 @@
 #include "pico/stdlib.h"
 #include "hardware/pll.h"
 #include "hardware/clocks.h"
+
+// Change SAMPLE_RATE and DEF_SYS_CLK_MHZ accorging to the table to avoid jitter.
+// Please check in the datasheet of your microphone if the PDM frequecy is supported .
+// |-------------------|-------|-------|-------|
+// | Sample rate [Hz]  | 16000 | 25000 | 48000 |
+// | Sytem clock [Mhz] | 153.6 |   144 | 153.6 |
+// | PDM clock [Mhz]   | 1.024 |   1.6 | 3.072 |
+// | Clock division    |  37.5 |  22.5 |  12.5 |
+// |-------------------|-------|-------|-------|
+
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
 //--------------------------------------------------------------------+
 #define PIO_DATA_PIN      17
 #define PIO_CLK_PIN       16
-#define SAMPLE_RATE       25000
+#define SAMPLE_RATE       48000
+#define DEF_SYS_CLK_MHZ   153.6
 #define PDM_DECIMATION    64
-#define SYS_CLK_MHZ 192
 #define RAW_BUFFER_COUNT  2
 #define RAW_BUFFER_SIZE   512
 /* Blink pattern
@@ -54,7 +85,9 @@ volatile bool flag_mic_started = false;
 int main(void)
 {
   board_init();
-  set_sys_clock_khz(SYS_CLK_MHZ * 1000, true);
+  
+  set_sys_clock_khz(DEF_SYS_CLK_MHZ * 1000, true); // set_sys_clock_khz(uint32_t	freq_khz, bool	required)
+  
   // init device stack on configured roothub port
   tud_init(BOARD_TUD_RHPORT);
 
@@ -170,7 +203,9 @@ void dma_pio_init()
   // Set up a PIO state machine to serialise our bits
   uint offset = pio_add_program(pio0, &pdm_microphone_data_program);
 
-  // 4.0 is the number of instructions in PIO Program
+  // To avoid Jitter, try to configurate the clk_sys so that clk_div
+  // will be an integer
+  // 4 is the number of instructions in PIO Program
   float clk_div = clock_get_hz(clk_sys) / (SAMPLE_RATE * PDM_DECIMATION * 4.0); 
 
   raw_buffer[0] = malloc(RAW_BUFFER_SIZE * sizeof(uint8_t));
