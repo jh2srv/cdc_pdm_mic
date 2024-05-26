@@ -22,7 +22,7 @@ This repository contains code for reading raw data from a MEMS PDM (Pulse Densit
 | GPIO 16 | CLK |
 
 2. **Software Setup**: Clone this repository to your Raspberry Pi Pico development environment.
-3. **Compilation**:
+3. **Compilation**: 
     - Ensure you have the Raspberry Pi's Pico SDK and required toolchains installed, such as TinyUSB. Refer to the [official Raspberry Pi Pico documentation](https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf) for detailed instructions.
     - Set the `PICO_SDK` environment variable to the path containing the Pico SDK.
     - Use the following commands to compile the code:
@@ -32,10 +32,11 @@ This repository contains code for reading raw data from a MEMS PDM (Pulse Densit
       cmake -G "NMake Makefiles" .. -DPICO_BOARD=pico -DFAMILY=rp2040 -DBOARD=raspberry_pi_pico
       nmake
       ```
-5. **Flash the UF2 file to Raspberry Pi Pico**: Flash the compiled code onto the Raspberry Pi Pico microcontroller.
-6. **Connect to Serial Terminal**: Use a serial terminal application to connect to the Raspberry Pi Pico over USB CDC. (Ensure appropriate drivers are installed if needed.)
-7. **View Data**: Once connected, you should start receiving raw data from the MEMS PDM microphone.
+4. **Flash the UF2 file to Raspberry Pi Pico**: Flash the compiled code onto the Raspberry Pi Pico microcontroller.
+5. **Connect to Serial Terminal**: Use a serial terminal application to connect to the Raspberry Pi Pico over USB CDC. (Ensure appropriate drivers are installed if needed.)
+6. **View Data**: Refer to the notebook in the `example` folder for instructions on how to use and visualize the data.
 
+**Note**: A compiled UF2 version can be found under `firmware`.
 ## Dependencies
 - [TinyUSB](https://github.com/hathach/tinyusb): A small and efficient USB stack for USB-enabled microcontrollers. Used for USB CDC communication.
 
